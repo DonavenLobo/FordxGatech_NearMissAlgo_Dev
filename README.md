@@ -14,17 +14,21 @@ The main goals of this project are:
 5. **Latent Space Analysis**: Optionally perform analysis in a lower-dimensional latent space to evaluate potential improvements in performance and computational efficiency.
 
 ## Background
-MASS (Mueen's Algorithm for Similarity Search) is a highly efficient approach to compute distance profiles between a query and a time series, typically using z-normalized Euclidean distance. This allows us to identify similar subsequences effectively, making it a foundational tool for time series data mining.
+**MASS (Mueen's Algorithm for Similarity Search)** is a highly efficient approach to compute distance profiles between a query and a time series, typically using z-normalized Euclidean distance. This allows us to identify similar subsequences effectively, making it a foundational tool for time series data mining.
 
 In our use case, we aim to analyze vehicle dynamics data from Ford Insure, looking for near-miss events and specific driver behaviors. We seek to develop an extended MASS function to overcome some limitations in the original implementation and enhance its capabilities, such as fair feature weighting and handling of categorical data. By improving MASS, we hope to improve the ability to detect patterns in driving behavior that could signal a near-miss or indicate potential risks.
+
+In time series analysis, **Dynamic Time Warping (DTW)** is an algorithm for measuring similarity between two temporal sequences, which may vary in speed. This can be useful as we may have vehicle dynamics that occur at different rates or speeds (e.g. Fast swerving, vs. Slow swerving)
 
 ## Key Resources
 1. [VLDB 2023: Time Series Data Mining - A Unifying View by Eamonn Keogh](https://www.cs.ucr.edu/~eamonn/Hot_paths_to_anomaly_detection_with_TIBCO_data_science,_streaming_on_AWS_AIM201-S.pdf)
 2. [MASS: Distance Profile of a Query Over a Time Series - Data Mining and Knowledge Discovery, 2024](https://doi.org/10.1007/s10618-024-01005-2)
 3. [Mueen's Fast Similarity Search Algorithm (MASS)](http://www.cs.unm.edu/~mueen/FastestSimilaritySearch.html)
 4. [Python Implementation of MASS written by Tyler Marrs](https://github.com/tylerwmarrs/mass-ts)
+5. [Dynamic Time Warping (DTW) Slides](https://www.cs.unm.edu/~mueen/DTW.pdf)
+6. [Fast DTW Python Implementation](https://github.com/slaypni/fastdtw/tree/master)
 
-These resources provide comprehensive background on MASS, its applications, and its efficiency for computing distance profiles in time series data mining. The project aims to build upon these existing works by incorporating additional considerations specific to vehicle dynamics and safety analysis.
+These resources provide comprehensive background on MASS and DTW, its applications, and its efficiency for computing distance profiles in time series data mining. The project aims to build upon these existing works by incorporating additional considerations specific to vehicle dynamics and safety analysis.
 
 ## Installation
 To set up this project locally, clone the repository and install the required dependencies:
