@@ -1,13 +1,13 @@
 import numpy as np
 from fastdtw import fastdtw
 
-def near_miss_v3(x, y, r=3):
+def near_miss(x, y, r=3):
     """
     Parameters:
     x : numpy array
-        Long time series data
+        Long time series data (Trip)
     y : numpy array
-        Query sequence
+        Query sequence (Near Miss Pattern)
     r : int
         Size of neighborhood when expanding the path. A higher value will
         increase the accuracy of the calculation but also increase time
