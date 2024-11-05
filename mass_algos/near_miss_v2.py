@@ -2,6 +2,9 @@ import numpy as np
 from fastdtw import fastdtw
 
 """
+V2 Update: Near Miss Algorithm updated to compare the query with varying length sub-sequences of the longer time series to 
+account for the different rate of actions
+
 This module implements a Dynamic Time Warping (DTW)-based near-miss detection algorithm to identify segments in long time series 
 data that closely resemble a given query pattern, with an additional scale penalty. 
 
@@ -23,6 +26,7 @@ Dependencies:
 - `fastdtw` for fast, approximate DTW calculations
 """
 
+
 def near_miss(x, y, r=3):
     """
     Parameters:
@@ -41,20 +45,31 @@ def near_miss(x, y, r=3):
     """
     n = len(x)
     m = len(y)
+    half_m = m // 2 # half the length of the query and round down
     expected_length = n - m + 1
     dist = []
 
     k = determine_k(n, m) # Size of pieces (Refer to MASS V3)
 
-    # Loop through segments of the time series x
-    for j in range(0, n - m + 1, k):  # Adjust step size based on query length and window
-        segment = x[j:j + m]
-        
-        if len(segment) == m:  # Ensure segment matches query length
-            # Use DTW to compute distance between the current segment and the query
-            distance, _ = fastdtw(segment, y)
-            distance += compute_scale_penalty(segment, y)
-            dist.append(distance)
+    # Loop through the time series x with varying segment lengths
+    for j in range(0, n - m + 1, k):
+        segment_lengths = list(range(m - half_m, m + half_m + 1)) # Test with different segment lengths to find better matches of varying lengths
+        best_distance = float('inf')
+
+        for seg_len in segment_lengths:
+            if j + seg_len <= n:  # Ensure segment doesn't exceed bounds
+                segment = x[j:j + seg_len]
+
+                # Use DTW to compute distance between the current segment and the query
+                distance, _ = fastdtw(segment, y)
+                distance += compute_scale_penalty(segment, y)
+
+                # Keep the best distance for this starting point
+                if distance < best_distance:
+                    best_distance = distance
+
+        # Append the best distance found for this position
+        dist.append(best_distance)
 
     # Ensure consistent length
     dist = np.array(dist)
