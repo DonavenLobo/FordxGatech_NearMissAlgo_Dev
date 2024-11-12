@@ -43,6 +43,7 @@ def near_miss(x, y, r=3, scale_weight=0):
     dist : numpy array
         DTW-based distance profile with scale penalty
     """
+
     n = len(x)
     m = len(y)
     half_m = m // 2  # Half the length of the query
@@ -95,9 +96,14 @@ def near_miss(x, y, r=3, scale_weight=0):
 
 def z_normalize(ts):
     """
-    Z-normalizes a time series.
+    Z-normalizes a time series with protection against edge cases.
     """
-    return (ts - np.mean(ts)) / np.std(ts)
+    std = np.std(ts)
+    if std == 0:  # Handle constant sequences
+        return np.zeros_like(ts)
+    if np.any(np.isnan(ts)) or np.any(np.isinf(ts)):  # Handle invalid values
+        return np.zeros_like(ts)
+    return (ts - np.mean(ts)) / std
 
 def compute_scale_penalty(subsequence, query_sequence):
     """
